@@ -13,10 +13,10 @@ class Connection
         $this->close();
     }
 
-    private function conect()
+    private static function conect()
     {
         try {
-            self::$conn = new PDO(DB_NAME.":host=".SEVER.";dbname=".DB_NAME.";charset=utf8", USER, PASSWRD);
+            self::$conn = new PDO(DB.":host=".SEVER.";dbname=".DB_NAME.";charset=utf8", USER, PASSWRD);
             self::$conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             return self::$conn;
         } catch (PDOException $e) {
@@ -33,10 +33,20 @@ class Connection
         }
     }
 
-    public static function insert(string $table, string $fields, string $data) {
-        // $data = [':data' => "{$date} 08:00:00"];
-        $sql = "INSERT into {$table} ({$fields}) VALUES ({$data});";
-        $stmt = self::$conn->prepare($sql);
-        $stmt->execute($data);
+    public static function insert(string $table, string $fields, string $data, ?array $arrayData) {
+        self::conect();
+        self::$conn->beginTransaction();
+        try{
+            $sql = "INSERT into {$table} ({$fields}) VALUES ({$data});";
+            $stmt = self::$conn->prepare($sql);
+            $stmt->execute($arrayData);
+
+            self::$conn->commit();
+        }catch(PDOException $e) {
+            self::$conn->rollBack();
+            echo $e->getMessage();
+        }
+
+        // self::close();
     }
 }

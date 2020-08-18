@@ -1,19 +1,20 @@
 <?php
-// require 'config.php';
-// require 'db/Connection.php';
+require 'config.php';
+require 'db/Connection.php';
 require 'utils/GerateDate.php';
 
-// info date
-$dates = GerateDate::gerate('now', '2021-01-01', ['Mon','Tue', 'Wed', 'Fri']);
+// Generate Dates without the days Monday, Tuesday, Wednesday, thursday, saturday, Sunday
+$dates = GerateDate::gerate('2021-01-01', '2021-12-31', ['Mon', 'Tue', 'Wed', 'Thu', 'Sat', 'Sun']);
 
+foreach($dates as $date) {
+    $sql[] = "INSERT into data_agendamento (data, datasalvo, idsalvo, ativo) VALUES ('$date', NOW(), '423', '1');";
+}
 
-// $conn->beginTransaction();
-// try{
-//     foreach($dates as $date){
-//         Connection::insert('data_agendamento', 'data, datasalvo, idsalvo, ativo', "':data, NOW(), '423', 1'");
-//         $sql = "INSERT into data_agendamento ()VALUES (:data, NOW(), '423', 1);";
-//     }
-//     $conn->commit();
-// }catch(Exception $e) {
-//     $conn->rollBack();
-// }
+foreach($dates as $date){
+    Connection::insert(
+        'dates',
+        'date, create_at',
+        "':date', NOW()",
+        [':date' => "{$date} 08:00:00"]
+    );
+}
