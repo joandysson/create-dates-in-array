@@ -10,7 +10,7 @@ class Connection
 
     function __destruct()
     {
-        $this->close();
+        // $this->close();
     }
 
     private static function conect()
@@ -34,7 +34,7 @@ class Connection
     }
 
     public static function insert(string $table, string $fields, string $data, ?array $arrayData) {
-        self::conect();
+        // self::conect();
         self::$conn->beginTransaction();
         try{
             $sql = "INSERT into {$table} ({$fields}) VALUES ({$data});";
