@@ -7,7 +7,6 @@ require 'utils/GerateDate.php';
 $dates = GerateDate::gerate('2021-01-01', '2021-12-31', ['Mon', 'Tue', 'Wed', 'Thu', 'Sat', 'Sun']);
 
 foreach($dates as $date){
-    echo $date; exit;
     $connection = new Connection();
     $connection::insert(
         'dates',
